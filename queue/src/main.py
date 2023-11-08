@@ -18,6 +18,7 @@ import sys
 class Queue:
     def __init__(self, queue_size:int = 8):
         self.MAX_QSIZE = queue_size
+        self.items = [None] * self.MAX_QSIZE
         self.clear()
 
         
@@ -28,7 +29,8 @@ class Queue:
         return self.front % self.MAX_QSIZE == (self.rear + 1) % self.MAX_QSIZE
 
     def clear(self) -> None:
-        self.items = [None for _ in range(self.MAX_QSIZE)]
+        for i in range(self.MAX_QSIZE):
+            self.items[i] = None
         self.front = -1
         self.rear = -1
         
