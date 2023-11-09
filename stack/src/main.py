@@ -91,32 +91,32 @@ def bracket_checker(formula:str) -> bool:
     stack_no = 13
     note_no = 25
     
-    print(f"+-{"":-^{char_no}}-+-{"":-^{stack_no}}-+-{"":-^{note_no}}-+")
-    print(f"| {"char":^{char_no}} | {"bracket_stack":^{stack_no}} | {"note":^{note_no}} |")
-    print(f"+-{"":-^{char_no}}-+-{"":-^{stack_no}}-+-{"":-^{note_no}}-+")
+    print(f'+-{"":-^{char_no}}-+-{"":-^{stack_no}}-+-{"":-^{note_no}}-+')
+    print(f'| {"char":^{char_no}} | {"bracket_stack":^{stack_no}} | {"note":^{note_no}} |')
+    print(f'+-{"":-^{char_no}}-+-{"":-^{stack_no}}-+-{"":-^{note_no}}-+')
     for char in formula:
         if char == ' ':
             continue
         # 괄호 사용 규칙
         if char in open_bracket:
             bracket_stack.push(char)
-            print(f"| {char:^{char_no}} | {str(bracket_stack):^{stack_no}} | {"bracket open":^{note_no}} |")
+            print(f'| {char:^{char_no}} | {str(bracket_stack):^{stack_no}} | {"bracket open":^{note_no}} |')
         elif char in close_bracket:
         # 1. “]“, “}“, “)“이 출현할 경우 stack이 empty이면 에러
             if bracket_stack.is_empty():
-                print(f"| {char:^{char_no}} | {str(bracket_stack):^{stack_no}} | {"not have open bracket":^{note_no}} |")
-                print(f"+-{"":-^{char_no}}-+-{"":-^{stack_no}}-+-{"":-^{note_no}}-+")
+                print(f'| {char:^{char_no}} | {str(bracket_stack):^{stack_no}} | {"not have open bracket":^{note_no}} |')
+                print(f'+-{"":-^{char_no}}-+-{"":-^{stack_no}}-+-{"":-^{note_no}}-+')
                 return False
         # 2. “]“, “}“, “)“ 중 하나가 출현할 경우 stack에는 각각 “[“, “{“, “(“ 중 하나가 있어야 한다.
             if not match_bracket(bracket_stack.pop(), char):
-                print(f"| {char:^{char_no}} | {str(bracket_stack):^{stack_no}} | {"bracket not match":^{note_no}} |")
-                print(f"+-{"":-^{char_no}}-+-{"":-^{stack_no}}-+-{"":-^{note_no}}-+")
+                print(f'| {char:^{char_no}} | {str(bracket_stack):^{stack_no}} | {"bracket not match":^{note_no}} |')
+                print(f'+-{"":-^{char_no}}-+-{"":-^{stack_no}}-+-{"":-^{note_no}}-+')
                 return False
-            print(f"| {char:^{char_no}} | {str(bracket_stack):^{stack_no}} | {"bracket close":^{note_no}} |")
+            print(f'| {char:^{char_no}} | {str(bracket_stack):^{stack_no}} | {"bracket close":^{note_no}} |')
         else:
-            print(f"| {char:^{char_no}} | {str(bracket_stack):^{stack_no}} | {"continue":^{note_no}} |")
+            print(f'| {char:^{char_no}} | {str(bracket_stack):^{stack_no}} | {"continue":^{note_no}} |')
         # 3. 더 이상 “]“, “}“, “)“이 출현하지 않을 경우 stack은 비어있어야 한다.
-    print(f"+-{"":-^{char_no}}-+-{"":-^{stack_no}}-+-{"":-^{note_no}}-+")
+    print(f'+-{"":-^{char_no}}-+-{"":-^{stack_no}}-+-{"":-^{note_no}}-+')
     return bracket_stack.is_empty()
             
 
@@ -143,9 +143,9 @@ def infix_to_postfix(formula:str) -> str:
     postfix_no = 25
     note_no = 25
     
-    print(f"+-{"":-^{char_no}}-+-{"":-^{stack_no}}-+-{"":-^{postfix_no}}-+-{"":-^{note_no}}-+")
-    print(f"| {"char":^{char_no}} | {"operator_stack":^{stack_no}} | {"postfix_output":^{postfix_no}} | {"note":^{note_no}} |")
-    print(f"+-{"":-^{char_no}}-+-{"":-^{stack_no}}-+-{"":-^{postfix_no}}-+-{"":-^{note_no}}-+")
+    print(f'+-{"":-^{char_no}}-+-{"":-^{stack_no}}-+-{"":-^{postfix_no}}-+-{"":-^{note_no}}-+')
+    print(f'| {"char":^{char_no}} | {"operator_stack":^{stack_no}} | {"postfix_output":^{postfix_no}} | {"note":^{note_no}} |')
+    print(f'+-{"":-^{char_no}}-+-{"":-^{stack_no}}-+-{"":-^{postfix_no}}-+-{"":-^{note_no}}-+')
     
     for char in formula:
         if char == ' ':
@@ -198,8 +198,8 @@ def infix_to_postfix(formula:str) -> str:
         if poped in operator:
             postfix += " "
             postfix += poped
-            print(f"| {"":^{char_no}} | {str(operator_stack):^{stack_no}} | {postfix:^{postfix_no}} | {"last pop":^{note_no}} |")
-    print(f"+-{"":-^{char_no}}-+-{"":-^{stack_no}}-+-{"":-^{postfix_no}}-+-{"":-^{note_no}}-+")
+            print(f'| {"":^{char_no}} | {str(operator_stack):^{stack_no}} | {postfix:^{postfix_no}} | {"last pop":^{note_no}} |')
+    print(f'+-{"":-^{char_no}}-+-{"":-^{stack_no}}-+-{"":-^{postfix_no}}-+-{"":-^{note_no}}-+')
     return postfix  
 
 # postfix 계산 프로그램
@@ -223,34 +223,34 @@ def postfix_calculation(formula:str) -> any:
     variable_no = 10
     note_no = 25
     
-    print(f"+-{"":-^{term_no}}-+-{"":-^{stack_no}}-+-{"":-^{variable_no}}-+-{"":-^{note_no}}-+")
-    print(f"| {"term":^{term_no}} | {"operand_stack":^{stack_no}} | {"variable":^{variable_no}} | {"note":^{note_no}} |")
-    print(f"+-{"":-^{term_no}}-+-{"":-^{stack_no}}-+-{"":-^{variable_no}}-+-{"":-^{note_no}}-+")
+    print(f'+-{"":-^{term_no}}-+-{"":-^{stack_no}}-+-{"":-^{variable_no}}-+-{"":-^{note_no}}-+')
+    print(f'| {"term":^{term_no}} | {"operand_stack":^{stack_no}} | {"variable":^{variable_no}} | {"note":^{note_no}} |')
+    print(f'+-{"":-^{term_no}}-+-{"":-^{stack_no}}-+-{"":-^{variable_no}}-+-{"":-^{note_no}}-+')
     
     for term in formula:
     # Postfix 계산규칙 :
     # 1. operand가 나오면 stack에 push()
         if term.isdigit():
             operand_stack.push(int(term))
-            print(f"| {term:^{term_no}} | {str(operand_stack):^{stack_no}} | {"":^{variable_no}} | {"operand push":^{note_no}} |")
+            print(f'| {term:^{term_no}} | {str(operand_stack):^{stack_no}} | {"":^{variable_no}} | {"operand push":^{note_no}} |')
     # 2. operator가 나오면
         elif term in operator:
-            print(f"| {term:^{term_no}} | {str(operand_stack):^{stack_no}} | {term:^{variable_no}} | {"find operator":^{note_no}} |")
+            print(f'| {term:^{term_no}} | {str(operand_stack):^{stack_no}} | {term:^{variable_no}} | {"find operator":^{note_no}} |')
     # - operand2 = pop() # 순서 중요
             operand2 = operand_stack.pop()
-            print(f"| {"":^{term_no}} | {str(operand_stack):^{stack_no}} | {operand2:^{variable_no}} | {"operand2 pop":^{note_no}} |")
+            print(f'| {"":^{term_no}} | {str(operand_stack):^{stack_no}} | {operand2:^{variable_no}} | {"operand2 pop":^{note_no}} |')
     # - operand1 = pop()
             operand1 = operand_stack.pop()
-            print(f"| {"":^{term_no}} | {str(operand_stack):^{stack_no}} | {operand1:^{variable_no}} | {"operand1 pop":^{note_no}} |")
+            print(f'| {"":^{term_no}} | {str(operand_stack):^{stack_no}} | {operand1:^{variable_no}} | {"operand1 pop":^{note_no}} |')
     # 3. operand1 operator(+-*/) operand2 수행 후 stack에 push()
             calculated = calculate(operand1, operand2, term)
             operand_stack.push(calculated)
-            print(f"| {"":^{term_no}} | {str(operand_stack):^{stack_no}} | {calculated:^{variable_no}} | {"calculate and push":^{note_no}} |")
+            print(f'| {"":^{term_no}} | {str(operand_stack):^{stack_no}} | {calculated:^{variable_no}} | {"calculate and push":^{note_no}} |')
     # 4. 끝까지 반복
         else:
             raise ValueError("Invalid term")
     # 5. stack에 남아 있는 값 출력
-    print(f"+-{"":-^{term_no}}-+-{"":-^{stack_no}}-+-{"":-^{variable_no}}-+-{"":-^{note_no}}-+")
+    print(f'+-{"":-^{term_no}}-+-{"":-^{stack_no}}-+-{"":-^{variable_no}}-+-{"":-^{note_no}}-+')
     return operand_stack.pop()
 
 
