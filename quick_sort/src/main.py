@@ -16,6 +16,7 @@
 # True : print debug message
 DEBUG = False   
 
+
 # module containing
 import sys      # for call main function
 import random   # for create random data
@@ -76,7 +77,7 @@ def time_check(func, *args, **kwargs) -> any:
     start = time.time()
     result = func(*args, **kwargs) # call func and save result
     end = time.time()
-    print(f'\'{func.__name__}\' function Run Time : {end - start:.4f} Sec')
+    print(f'\'{func.__name__}\' function Run Time : {end - start:.6f} Sec')
     return result # return func result
 
 
