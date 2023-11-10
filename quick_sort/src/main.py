@@ -13,57 +13,88 @@
 # <조건 5> 프로그램 수행시간을 출력한다.
 
 
+# True : print debug message
+DEBUG = False   
+
 # module containing
 import sys      # for call main function
 import random   # for create random data
 import time     # for check time
 
-# 정렬할 데이터 생성
-def create_random_data(size:int = 10000) -> list:
+
+# Create data for sort
+def create_random_data(size:int = 1000) -> list:
     return [random.randint(0, 999) for _ in range(size)]
 
-# Quick Sort 구현
-def quick_sort(data:list, start:int, end:int) -> None:
-    if start >= end:
-        return
-    pivot = start
-    left = start + 1
-    right = end
-    while left <= right:
-        while left <= end and data[left] <= data[pivot]:
-            left += 1
-        while right > start and data[right] >= data[pivot]:
-            right -= 1
-        if left > right:
-            data[right], data[pivot] = data[pivot], data[right]
+
+# Print data
+def print_data(data:list, skip:int = 5, *args, **kwargs) -> None:
+    result = data
+    if len(data) > skip*2:
+        result = data[:skip] + [" ... "] + data[-skip:]   # print first (number of)skip and last (number of)skip data
+    print('[', end="")
+    hidden = True
+    for num in result:
+        if type(num) is int:
+            if hidden:
+                print(f"{num:}", end="")
+                hidden = False
+            print(f", {num:}", end="")
         else:
-            data[left], data[right] = data[right], data[left]
-    quick_sort(data, start, right - 1)
-    quick_sort(data, right + 1, end)
+            print(num, end="")
+            hidden = True
+    print(']')
+    print(f"Data length : {len(data)}", *args, **kwargs)
 
 
-# 콜백 함수를 이용한 수행시간 측정
+# Quick Sort - Return swap count
+def quick_sort(data:list, start:int, end:int) -> int:
+    swap_count = 0
+    if start < end:
+        pivot = (end - start) // 2 + start
+        left = start
+        right = end
+        while left <= right:
+            while data[left] < data[pivot]:
+                left += 1
+            while data[right] > data[pivot]:
+                right -= 1
+            if left <= right:
+                if left != right and data[left] != data[right]:
+                    data[left], data[right] = data[right], data[left]
+                    if DEBUG: print(f"swap {data[left]} <-> {data[right]}")
+                    swap_count += 1
+                left += 1
+                right -= 1
+        swap_count += quick_sort(data, start, right)
+        swap_count += quick_sort(data, left, end)
+    return swap_count
+
+
+# Time check using callback function
 def time_check(func, *args, **kwargs) -> any:
     start = time.time()
-    result = func(*args, **kwargs)
+    result = func(*args, **kwargs) # call func and save result
     end = time.time()
-    print(f'수행시간 : {end - start:.3f}초\n')
-    return result
+    print(f'\'{func.__name__}\' function Run Time : {end - start:.4f} Sec')
+    return result # return func result
 
 
 # define main function
 def main(*args, **kwargs) -> int:
-    data = create_random_data()
-    print("정렬 전 데이터")
-    print(f"{data[:20]} ... {data[-20:]}\n")   # print first 10 and last 10 data
+    data = create_random_data(5)
     
-    print("정렬 시행...")
-    time_check(quick_sort, data, 0, len(data) - 1)
+    print("Data before Quick sort")
+    print_data(data, 10, end='\n\n')
     
-    print("정렬 후 데이터")
-    print(f"{data[:20]} ... {data[-20:]}\n")   # print first 10 and last 10 data
+    swap_count = time_check(quick_sort, data, 0, len(data) - 1)
+    if DEBUG: print(f"swap count : {swap_count}")
+    print()
     
-    return 0  # return exit code 0 (success)
+    print("Data after Quick Sort")
+    print_data(data, 10)
+    
+    return 0
 
 
 # call main function
