@@ -77,13 +77,13 @@ def time_check(func, *args, **kwargs) -> any:
     start = time.time()
     result = func(*args, **kwargs) # call func and save result
     end = time.time()
-    print(f'\'{func.__name__}\' function Run Time : {end - start:.6f} Sec')
+    print(f'\'{func.__name__}\' function Run Time : {end - start:.8f} Sec')
     return result # return func result
 
 
 # define main function
 def main(*args, **kwargs) -> int:
-    data = create_random_data(5)
+    data = create_random_data(1000)
     
     print("Data before Quick sort")
     print_data(data, 10, end='\n\n')
