@@ -40,7 +40,8 @@ def print_data(data:list, skip:int = 5, *args, **kwargs) -> None:
             if hidden:
                 print(f"{num:}", end="")
                 hidden = False
-            print(f", {num:}", end="")
+            else:
+                print(f", {num:}", end="")
         else:
             print(num, end="")
             hidden = True
