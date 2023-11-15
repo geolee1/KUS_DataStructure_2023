@@ -32,7 +32,7 @@ def create_random_data(size:int = 1000) -> list:
 def print_data(data:list, skip:int = 5, *args, **kwargs) -> None:
     result = data
     if len(data) > skip*2:
-        result = data[:skip] + [" ... "] + data[-skip:]   # print first (number of)skip and last (number of)skip data
+        result = data[:skip] + [", ... "] + data[-skip:]   # print first (number of)skip and last (number of)skip data
     print('[', end="")
     hidden = True
     for num in result:
@@ -83,6 +83,8 @@ def time_check(func, *args, **kwargs) -> any:
 
 # define main function
 def main(*args, **kwargs) -> int:
+    if DEBUG: print("DEBUG MODE\n")
+    
     data = create_random_data(1000)
     
     print("Data before Quick sort")
