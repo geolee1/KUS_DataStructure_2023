@@ -15,41 +15,58 @@ DEBUG = False
 
 
 # module containing
+from typing import Any, Iterable, SupportsIndex, Optional, Tuple, List
 import sys      # for call main function
 import random   # for create random data
 
-
 # Linked List
 class Node:
-    def __init__(self, data):
-        self.data = data
+    def __init__(self, __object:Any):
+        self.data = __object
         self.next = None
      
 class LinkedList:
-    def __init__(self, iterable_data = None):
+    def __init__(self, __iterable:Iterable = None):
+        '''Built-in mutable sequence.
+
+        If no argument is given, the constructor creates a new empty linked list. The argument must be an iterable if specified.'''
         self.clear()
-        if iterable_data:
-            self.extend(iterable_data)
+        if __iterable:
+            self.extend(__iterable)
             
     def __str__(self) -> str:
-        pass
+        return self.__repr__()
     
     def __repr__(self) -> str:
-        pass
-    
+        return "[" + ", ".join(str(data) for data in self) + "]"
+        
     def __len__(self) -> int:
+        '''Return len(self).'''
         return self._len
     
     def __iter__(self):
-        pass
+        '''Implement iter(self).'''
+        node = self._head
+        while node:
+            yield node.data
+            node = node.next
+            
+    def __getitem__(self, __index:SupportsIndex):
+        if __index < 0:
+            __index += self._len
+        if __index < 0 or __index >= self._len:
+            raise IndexError("linked list index out of range")
+        else:
+            node = self._head
+            for _ in range(__index):
+                node = node.next
+        return node.data
+
     
-    def __next__(self):
-        pass
-    
-    # Add an item to the end of the linked list.
-    def append(self, data):
-        new_node = Node(data)
-        if self._head is None:
+    def append(self, __object:Any, /):
+        '''Add an item to the end of the linked list.'''
+        new_node = Node(__object)
+        if not self._head:
             self._head = new_node
             self._tail = new_node
             self._len += 1
@@ -58,89 +75,174 @@ class LinkedList:
             self._tail = new_node
             self._len += 1
             
-    # Extend the linked list by appending all the items from the iterable.
-    def extend(self, iterable_data):
-        for data in iterable_data:
-            self.append(data)
     
-    # Insert an item at a given position. 
-    # The first argument is the index of the element before which to insert, 
-    # so a.insert(0, x) inserts at the front of the linked list, 
-    # and a.insert(len(a), x) is equivalent to a.append(x).
-    def insert(self, index, data):
-        new_node = Node(data)
-        if index == 0:
+    def extend(self, __iterable:Iterable, /):
+        '''Extend the linked list by appending all the items from the iterable.'''
+        for one in __iterable:
+            self.append(one)
+    
+    def insert(self, __index:SupportsIndex, __object:Any, /):
+        '''Insert object before index.'''
+        if __index < 0:
+            __index += self._len
+        if __index < 0 or __index >= self._len:
+            raise IndexError("insert index out of range")
+        new_node = Node(__object)
+        if __index == 0:
             new_node.next = self._head
             self._head = new_node
             self._len += 1
         else:
             node = self._head
-            for _ in range(index - 1):
+            for _ in range(__index - 1):
                 node = node.next
             new_node.next = node.next
             node.next = new_node
             self._len += 1
     
-    # Remove the first item from the list whose value is equal to x. 
-    # It raises a ValueError if there is no such item.
-    def remove(self, data):
-        pass
-    #     if self._head.data == data:
-    #         self._head = self._head.next
-    #         self._count -= 1
-    #     else:
-    #         node = self._head
-    #         while node.next.data != data:
-    #             node = node.next
-    #         if node.data != data:
-    #             raise ValueError(f"{data} is not in linked list.")
-    #         if node.next == None:
-    #         node.next = node.next.next
-    #         self._count -= 1
+    def remove(self, __value:Any, /):
+        '''Remove first occurrence of value.
+
+        Raises ValueError if the value is not present.'''
+        if self._head.data == __value:
+            if self._tail == self._head:
+                self._tail = None
+            self._head = self._head.next
+            self._len -= 1
+        else:
+            node = self._head
+            while node.next:
+                if node.next.data == __value:
+                    if node.next == self._tail:
+                        self._tail = node
+                    node.next = node.next.next
+                    self._len -= 1
+                    return
+                node = node.next
+            raise ValueError(f"{__value} is not in linked list.")
     
-    # Remove the item at the given position in the list, and return it. 
-    # If no index is specified, a.pop() removes and returns the last item in the list. 
-    # (The square brackets around the i in the method signature denote that the parameter is optional, 
-    # not that you should type square brackets at that position. 
-    # You will see this notation frequently in the Python Library Reference.)
-    def pop(self, index = None):
-        pass
+    def pop(self, __index:SupportsIndex = -1, /):
+        '''Remove and return item at index (default last).
+
+        Raises IndexError if linked list is empty or index is out of range.'''
+        if __index < 0:
+            __index += self._len
+        if __index < 0 or __index >= self._len:
+            raise IndexError("pop index out of range")
+        if __index == 0:
+            data = self._head.data
+            if self._tail == self._head:
+                self._tail = None
+            self._head = self._head.next
+            self._len -= 1
+        else:
+            node = self._head
+            for _ in range(__index - 1):
+                node = node.next
+            data = node.next.data
+            if node.next == self._tail:
+                self._tail = node
+            node.next = node.next.next
+            self._len -= 1
+        return data
     
-    # Remove all items from the linked list.
     def clear(self):
+        '''Remove all items from the linked list.'''
         self._head = None
         self._tail = None
         self._len = 0
         
-    # Return zero-based index in the list of the first item whose value is equal to x. 
-    # Raises a ValueError if there is no such item.
-    # The optional arguments start and end are interpreted as in the slice notation and are used to limit the search to a particular subsequence of the list. 
-    # The returned index is computed relative to the beginning of the full sequence rather than the start argument.
-    def index(self, data, start = None, end = None):
-        pass
-    #     if start == None:
-    #         start = 0
-    #     if end == None:
-    #         end = self._count
-    #     node = self._head
-    #     for _ in range(start, end):
-    #         if node.data == data:
-    #             return _
-    #         node = node.next
-    #     raise ValueError(f"{data} is not in linked list."
     
-    # Return the number of times x appears in the list.
-    def count(self, data):
-        pass
+    def index(self, __value, __start = None, __end = None, /):
+        '''Return first index of value.
+        
+        Raises ValueError if the value is not present.'''
+        if start == None:
+            start = 0
+        if end == None:
+            end = self._count
+        node = self._head
+        for _ in range(start, end):
+            if node.data == __value:
+                return _
+            node = node.next
+        raise ValueError(f"{__value} is not in linked list.")
+    
+    def count(self, __value) -> int:
+        '''Return number of occurrences of value.'''
+        count = 0
+        for object in self:
+            if object == __value:
+                count += 1
+        return count
+
+
+class HashTable:
+    def __init__(self, __size:int, __iterable:Iterable = None, /):
+        '''Create a new hash table.
+        
+        size
+          the number of bucket.
+        iterable
+          optional argument. If given, the hash table is initialized by the elements in the iterable.'''
+        self._size = __size
+        self._table = [None for _ in range(__size)]
+        
+        if __iterable:
+            self.extend(__iterable)
+        
+    def hash(self, __object:int, /) -> int:
+        '''Return hash value of object.'''
+        return __object % self._size
+        
+    def append(self, __object:int, /):
+        '''Add an item to the end of the hash table.'''
+        bucket = self.hash(__object)
+        if not self._table[bucket]:
+            self._table[bucket] = LinkedList()
+        self._table[bucket].append(__object)
+    
+    def extend(self, __iterable:Iterable, /):
+        '''Extend the hash table by appending all the items from the iterable.'''
+        for one in __iterable:
+            self.append(one)
+    
+    def search(self, __value:int, /) -> Optional[Tuple[int, List[int]]]:
+        '''Search value in hash table.
+        
+        Return (bucket, list of index) if found, else None.'''
+        bucket = self.hash(__value)
+        if not self._table[bucket]:
+            return None
+        result = [index for index, value in enumerate(self._table[bucket]) if value == __value]
+        if not result: 
+            return None
+        if DEBUG: print(f"{bucket}-bucket", self._table[bucket])
+        return (bucket, result)
+
 
 # Create data for sort
-def create_random_data(size:int = 10000) -> LinkedList:
-    linked_list = LinkedList()
-    return [random.randint() for _ in range(size)]
+def create_random_data(size:int = 10000, a:int = 0, b:int = 10000, /) -> list:
+    '''Return the list of random integers in range [a, b], including both end points.'''
+    return [random.randint(a, b) for _ in range(size)]
 
 
 # define main function
 def main(*args, **kwargs) -> int:
+    rd_data = create_random_data(10000)
+    
+    try:
+        ht = HashTable(97, rd_data)
+        val = int(input("Search >> "))
+        print()
+        result = ht.search(val)
+        if result:
+            print(f"{val} is in {result[0]}-bucket index: {result[1]}")
+        else:
+            print(f"Not Found {val} in random numbers.")
+    except Exception as e:
+        print("Error : ", e)
+        
     return 0
 
 
