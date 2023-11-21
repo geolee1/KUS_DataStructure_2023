@@ -5,7 +5,7 @@
 # 2021271402 이지오
 
 # <전제 1> 임의의 정수 1만개가 있다.
-# <조건 1> bucket을 97개 만든다. (하필이면 97인가?)
+# <조건 1> bucket을 97개 만든다. (하필이면 97인가? : 100 이하 가장 큰 소수이기 때문이다 -> heuristic한 방법이다.)
 # <조건 2> 각각의 bucket에 1만개의 정수를 linked list로 위치 시킨다.
 # <조건 3> 임의의 숫자가 몇 번째 bucket의 몇 번째 linked list에 위치하는지 출력
 # 없다면 “not found” 출력
@@ -234,6 +234,7 @@ def create_random_data(size:int, a:int = 0, b:int = 10000, /) -> list:
 
 # define main function
 def main(*args, **kwargs) -> int:
+    print("Search Numbers - ^C to Quit\n")
     if DEBUG: print("Create 10000 random data.")
     rd_data = create_random_data(10000)
     if DEBUG: print("[" + ", ".join(str(data) for data in rd_data[:10]) + " ... ]")
@@ -241,15 +242,20 @@ def main(*args, **kwargs) -> int:
     try:
         if DEBUG: print("Create HashTable with random data.")
         ht = HashTable(97, rd_data)
-        val = int(input("Search >> "))
-        print()
-        result = ht.search(val)
-        if result:
-            print(f"{val} is in {result[0]}-bucket index: {result[1]}")
-        else:
-            print(f"Not Found {val} in random numbers.")
+        while True:
+            try:
+                val = int(input("Search >> "))
+            except KeyboardInterrupt: # ^C to quit
+                break
+            print()
+            result = ht.search(val)
+            if result:
+                print(f"{val} is in {result[0]}-bucket index: " + ",  ".join(str(data) for data in result[1]))
+            else:
+                print(f"Not Found {val} in random numbers.")
+            print()
     except Exception as e:
-        print("Error : ", e)
+        print("Error : ", e,)
         
     return 0
 
