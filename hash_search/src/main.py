@@ -38,7 +38,7 @@ class LinkedList:
         return self.__repr__()
     
     def __repr__(self) -> str:
-        return "[" + ", ".join(str(data) for data in self) + "]"
+        return "(HEAD) -> " + " -> ".join(str(data) for data in self) + " -> (TAIL)"
         
     def __len__(self) -> int:
         '''Return len(self).'''
@@ -186,6 +186,8 @@ class HashTable:
         iterable
           optional argument. If given, the hash table is initialized by the elements in the iterable.'''
         self._size = __size
+        if DEBUG: print(f"{__size} bucket created.")
+        if DEBUG: print()
         self._table = [None for _ in range(__size)]
         
         if __iterable:
@@ -212,26 +214,32 @@ class HashTable:
         
         Return (bucket, list of index) if found, else None.'''
         bucket = self.hash(__value)
+        if DEBUG: print(f"Search {__value} in {bucket}-bucket.")
+        if DEBUG: print(f"{bucket}-bucket : ")
+        if DEBUG: print(self._table[bucket])
+        if DEBUG: print()
         if not self._table[bucket]:
             return None
         result = [index for index, value in enumerate(self._table[bucket]) if value == __value]
         if not result: 
             return None
-        if DEBUG: print(f"{bucket}-bucket", self._table[bucket])
         return (bucket, result)
 
 
 # Create data for sort
-def create_random_data(size:int = 10000, a:int = 0, b:int = 10000, /) -> list:
+def create_random_data(size:int, a:int = 0, b:int = 10000, /) -> list:
     '''Return the list of random integers in range [a, b], including both end points.'''
     return [random.randint(a, b) for _ in range(size)]
 
 
 # define main function
 def main(*args, **kwargs) -> int:
+    if DEBUG: print("Create 10000 random data.")
     rd_data = create_random_data(10000)
+    if DEBUG: print("[" + ", ".join(str(data) for data in rd_data[:10]) + " ... ]")
     
     try:
+        if DEBUG: print("Create HashTable with random data.")
         ht = HashTable(97, rd_data)
         val = int(input("Search >> "))
         print()
